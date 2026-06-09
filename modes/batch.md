@@ -102,3 +102,22 @@ El worker produce:
 | Worker crashea | Conductor marca `failed`, siguiente. Retry con `--retry-failed` |
 | Conductor muere | Re-ejecutar → lee state → skip completadas |
 | PDF falla | Report .md se guarda. PDF queda pendiente |
+
+## Supported Archetypes
+
+Workers detect and evaluate the following archetypes. Each archetype loads the corresponding mode file for evaluation logic.
+
+| Archetype | Mode file | Trigger signals |
+|-----------|-----------|-----------------|
+| AI Platform / LLMOps | `_shared.md` | observability, evals, pipelines, monitoring |
+| Agentic / Automation | `_shared.md` | agent, HITL, orchestration, multi-agent |
+| Technical AI PM | `_shared.md` | PRD, roadmap, discovery, product manager |
+| AI Solutions Architect | `_shared.md` | architecture, enterprise, integration |
+| AI Forward Deployed | `_shared.md` | client-facing, deploy, prototype, fast delivery |
+| AI Transformation | `_shared.md` | change management, adoption, enablement |
+| **fintech-pm** | `modes/fintech-pm.md` | UPI, NPCI, payment gateway, NACH, IMPS, RBI, BFSI — OR known Indian fintech company |
+| **ai-pm-india** | `modes/ai-pm-india.md` | LLM, generative AI, AI product, evals, RAG, foundation model — OR known AI-native company |
+
+**Dual-track:** If both `fintech-pm` and `ai-pm-india` trigger, activate `ai-pm-india` as primary; load `fintech-pm.md` for supplementary comp and company intelligence.
+
+**Passive search:** For all archetypes, workers must compute passive score (see `modes/fintech-pm.md` and `modes/ai-pm-india.md`) and apply `passive_search_threshold` from `config/profile.yml` before recommending action.
