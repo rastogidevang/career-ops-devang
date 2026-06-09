@@ -4,10 +4,16 @@ Cuando el candidato pega una oferta (texto o URL), entregar SIEMPRE los 7 bloque
 
 ## Paso 0 — Detección de Arquetipo
 
-Clasificar la oferta en uno de los 6 arquetipos (ver `_shared.md`). Si es híbrido, indicar los 2 más cercanos. Esto determina:
+Clasificar la oferta en uno de los 6 arquetipos base (ver `_shared.md`) o en uno de los 2 arquetipos India PM. Si es híbrido, indicar los 2 más cercanos. Esto determina:
 - Qué proof points priorizar en bloque B
 - Cómo reescribir el summary en bloque E
 - Qué historias STAR preparar en bloque F
+
+**fintech-pm:** Activate when the JD contains 2+ of: payment gateway, UPI, NACH, IMPS, NPCI, payment infrastructure, PCI-DSS, RBI compliance, fintech, lending, credit product, BFSI, banking technology. OR when the hiring company is a known Indian fintech (Razorpay, Juspay, Cashfree, CRED, Slice, Jupiter, Fi, BharatPe, Setu, Zeta, M2P, PayU, Pine Labs, Mswipe, Paytm, PhonePe, Groww, Zerodha, Jar). Load `modes/fintech-pm.md` for evaluation.
+
+**ai-pm-india:** Activate when the JD contains 2+ of: LLM, language model, generative AI, AI product, ML platform, model evaluation, evals, RAG, agentic, Claude, GPT, Gemini, foundation model. OR when the hiring company is a known AI-native company (Anthropic, OpenAI, Sarvam AI, Krutrim, Yellow.ai, Gnani.ai, Observe.AI, Arize AI, Weights & Biases, Langfuse, Cohere, Mistral). Load `modes/ai-pm-india.md` for evaluation.
+
+**Dual-track detection:** If a JD would trigger BOTH `fintech-pm` AND `ai-pm-india`, activate `ai-pm-india` as primary but load `fintech-pm.md` for supplementary comp and company intelligence. Note in the report: "Dual-track role — CV framing: AI track (see profile.yml cv_tracks.ai_pm)."
 
 ## Bloque A — Resumen del Rol
 
@@ -28,6 +34,8 @@ Lee `cv.md`. Crea tabla con cada requisito del JD mapeado a líneas exactas del 
 - Si FDE → priorizar proof points de delivery rápida y client-facing
 - Si SA → priorizar diseño de sistemas e integrations
 - Si PM → priorizar product discovery y métricas
+- Si fintech-pm → priorizar UPI scale, NPCI ecosystem depth, cross-functional fintech (compliance, risk, ops); leer `modes/fintech-pm.md`
+- Si ai-pm-india → priorizar AI product work (Kimi k2.6, Claude plugin, RAG), evals, honest gap assessment; leer `modes/ai-pm-india.md`
 - Si LLMOps → priorizar evals, observability, pipelines
 - Si Agentic → priorizar multi-agent, HITL, orchestration
 - Si Transformation → priorizar change management, adoption, scaling
@@ -77,6 +85,8 @@ The **Reflection** column captures what was learned or what would be done differ
 - FDE → enfatizar velocidad de entrega y client-facing
 - SA → enfatizar decisiones de arquitectura
 - PM → enfatizar discovery y trade-offs
+- fintech-pm → enfatizar UPI Biometric Auth (0-to-1, 6Mn users), Transaction Recon 2.0 (regulatory), UDIR (compliance + savings); passive score required
+- ai-pm-india → enfatizar Kimi k2.6 anomaly detection (MTTD 2hrs→5mins), Claude plugin (PRD cycles), RAG travel agent; honest gap note required
 - LLMOps → enfatizar métricas, evals, production hardening
 - Agentic → enfatizar orchestration, error handling, HITL
 - Transformation → enfatizar adopción, cambio organizacional
