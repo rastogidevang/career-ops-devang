@@ -35,9 +35,15 @@ Score this block on how well the role matches the candidate's fintech domain dep
 ### Block 2: Level and Seniority Alignment (Weight: 15%)
 The candidate is a Senior PM with 6 years experience at India's largest UPI platform.
 
+**Before flagging a title mismatch, verify hierarchy:**
+If the role title appears below the candidate's current level (e.g., "Product Manager" when candidate is "Senior PM"), run a WebSearch first:
+`"{Company} product manager levels"` OR `"{Company} PM title structure"` OR `"{Company} flat hierarchy"`
+- If the company uses a flat title structure (single "PM" title regardless of seniority): do NOT flag as downlevel — note "flat hierarchy confirmed" and score normally
+- Only flag downlevel if the hierarchy is confirmed tiered AND the role is clearly junior relative to candidate's 6 years experience
+
 **Evaluate:**
 - Is the role actually senior enough? (too junior = no growth, overshoots are fine)
-- Is there a path to GPM or Director? (important for passive search)
+- Is there a credible path to GPM (next logical level at 6 years experience)?
 - Will candidate be building new capability or inheriting mature product?
 - Team size signal: 0-person team vs established team matters
 

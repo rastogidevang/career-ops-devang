@@ -39,9 +39,15 @@ The candidate has 0 years as a "dedicated AI PM" and is actively building fluenc
 AI PM roles are often titled differently from traditional PM roles. Map:
 - "AI Product Lead" / "AI PM" → treat as Senior PM level
 - "Head of AI Product" → treat as Director level (may be a stretch)
-- "AI Product Manager" (no Senior) → check scope — may be mid-level even if AI-focused
+- "AI Product Manager" (no Senior) → **verify hierarchy before flagging** (see below)
 
-Flag: "If the role is below Senior equivalent, applying may limit negotiating leverage given candidate's current level at PhonePe."
+**Before flagging a title mismatch, verify hierarchy:**
+Many AI-native and US-origin companies use flat title structures — "Product Manager" may be the only PM title used regardless of seniority. Run a WebSearch before concluding it's a downlevel:
+`"{Company} product manager levels"` OR `"{Company} PM title structure"` OR `"{Company} flat hierarchy"`
+- If flat hierarchy confirmed: do NOT flag as downlevel — note it and score normally
+- Only flag downlevel if hierarchy is confirmed tiered AND role is clearly junior relative to candidate's 6 years experience
+
+If the role is confirmed below Senior equivalent after verification: flag "Applying may limit negotiating leverage given candidate's current level at PhonePe."
 
 ### Block 3: Compensation Analysis (Weight: 20%)
 
