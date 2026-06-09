@@ -82,8 +82,10 @@ Classify every offer into one of these types (or hybrid of 2):
 | AI Solutions Architect | "architecture", "enterprise", "integration", "design", "systems" |
 | AI Forward Deployed | "client-facing", "deploy", "prototype", "fast delivery", "field" |
 | AI Transformation | "change management", "adoption", "enablement", "transformation" |
+| fintech-pm | "UPI", "NPCI", "payment gateway", "NACH", "IMPS", "PCI-DSS", "RBI", "fintech", "BFSI", "lending", "credit product" — OR known Indian fintech company |
+| ai-pm-india | "LLM", "generative AI", "AI product", "evals", "RAG", "agentic", "foundation model", "Claude", "Gemini" — OR known AI-native company |
 
-After detecting archetype, read `modes/_profile.md` for the user's specific framing and proof points for that archetype.
+After detecting archetype, read `modes/_profile.md` for the user's specific framing and proof points for that archetype. For `fintech-pm` load `modes/fintech-pm.md`; for `ai-pm-india` load `modes/ai-pm-india.md`.
 
 ## Global Rules
 
@@ -159,3 +161,46 @@ These rules apply to ALL generated text that ends up in candidate-facing documen
 - "Cut p95 latency from 2.1s to 380ms" beats "improved performance"
 - "Postgres + pgvector for retrieval over 12k docs" beats "designed scalable RAG architecture"
 - Name tools, projects, and customers when allowed
+
+---
+
+## Passive Search Protocol
+
+The user is currently employed at PhonePe as a Senior PM. `search_mode: passive` is set in profile.yml.
+
+**What this means for every evaluation:**
+- The bar for recommending "apply" is higher than for an active job seeker
+- Always compute the passive score (see fintech-pm.md and ai-pm-india.md for the scoring rubric)
+- Always ask: "Is this worth leaving a senior role at India's largest payments platform?"
+- Never suggest applying to a role that doesn't clear `passive_search_threshold` from profile.yml
+- If a role is interesting but below threshold, output: "Monitor — revisit if situation changes"
+
+## Dual-Track CV Awareness
+
+This user has two CV framings defined in profile.yml:
+- **ai_pm track:** Lead with AI product work — Kimi k2.6 anomaly detection, Claude plugin, RAG travel agent
+- **fintech_pm track:** Lead with UPI scale, payment infrastructure, cross-functional fintech depth
+
+When generating a tailored CV or PDF:
+1. Read the archetype that triggered
+2. Load the corresponding `cv_tracks` section from profile.yml
+3. Reorder cv.md bullets accordingly — don't fabricate, reorder and reframe
+4. The first bullet under each role should be the most relevant achievement for this track
+
+## Global Quality Gate (Anti-Slop)
+
+Before outputting any career document (CV, cover letter, STAR story, outreach message):
+- Check for banned phrases (see modes/intake.md for the full list)
+- If found: rewrite that sentence before delivering
+- Documents below quality threshold are never shown to the user — rewrite first
+
+This is a non-negotiable quality standard. It protects the user's professional reputation.
+
+## Profile Reference
+
+Key facts loaded from config/profile.yml and cv.md at evaluation time:
+- Current company: PhonePe
+- Domain expertise: UPI, payment infrastructure, NPCI ecosystem
+- AI fluency: Kimi k2.6 (on-premises), Claude Code, Claude plugin, RAG, LLM-as-a-Judge evals
+- Location: Bengaluru (remote-friendly, not open to relocation)
+- Search posture: Passive — high bar, selective applications only
