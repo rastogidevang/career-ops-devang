@@ -43,8 +43,16 @@ The candidate is a Senior PM with 6 years experience at India's largest UPI plat
 
 ### Block 3: Compensation Analysis (Weight: 20%)
 
-Pull profile.yml for current CTC and target bands. Compute:
-- Estimated CTC range for this role (use GCC/fintech/startup stage benchmarks)
+**India norm:** Most Indian companies do not disclose compensation in JDs. A silent JD is not a red flag — it is the default. Never score comp low solely because the JD is silent.
+
+Pull profile.yml for current CTC (₹49L) and target bands (min ₹55L, ideal ₹62L). Then:
+
+1. **Check JD first** — is any comp range mentioned? If yes, use it directly.
+2. **If JD is silent** — run a WebSearch: `"{Company} Senior Product Manager Salary India"` and `site:glassdoor.com OR site:ambitionbox.com "{Company}" "Product Manager"`. Use the result to estimate.
+3. **If WebSearch returns nothing useful** — default to neutral (1/2 on passive score). Do not penalise.
+
+Compute:
+- Estimated CTC range for this role (use GCC/fintech/startup stage benchmarks + search results)
 - Delta vs current: positive delta %, neutral, or regression
 - Equity component: check if stock options mentioned, estimate value if stage is known
 - Bond clause risk: flag any mention of bond/lock-in period
@@ -53,10 +61,10 @@ For GCCs: note that total comp often trails VC-backed startups but stability and
 
 Format output as:
 ```
-Comp Estimate: ₹[X]–[Y]L CTC
-vs Current: [+X% / -X% / unclear]
-Equity: [mentioned/not mentioned/estimated at ₹Xk-Yk]
-Bond risk: [none/low/high — quote the clause if present]
+Comp Estimate: ₹[X]–[Y]L CTC  (source: JD / Glassdoor / AmbitionBox / estimated)
+vs Current:    [+X% / -X% / neutral-unknown]
+Equity:        [mentioned/not mentioned/estimated at ₹Xk-Yk]
+Bond risk:     [none/low/high — quote the clause if present]
 ```
 
 ### Block 4: Company and Stage Intelligence (Weight: 20%)
@@ -100,8 +108,8 @@ Before outputting the recommendation, ask: **"Would this role be worth leaving P
 
 Score on 4 dimensions:
 1. **Strategic uplift** (0–2): Does this role give the candidate something PhonePe cannot? (scope, company stage, domain expansion, title/level jump)
-2. **Comp delta** (0–2): Is total comp materially better? (>20% delta = 2, 10–20% = 1, <10% = 0)
-3. **Growth ceiling** (0–1): Is there a clear path to GPM/Director/VP within 2–3 years?
+2. **Comp delta** (0–2): Is total comp materially better? Run WebSearch if JD is silent — Indian companies rarely disclose. Score: >20% above ₹49L = 2, 10–20% = 1, <10% or neutral-unknown = 1 (not 0 — unknown is not negative). Only score 0 if comp is confirmed below current.
+3. **Growth ceiling** (0–1): Is there a credible path to GPM (next logical level) within 2–3 years? At 6 years experience, GPM is the realistic next step — do not require Director/VP visibility. Score 1 if GPM path is plausible, 0.5 if unclear, 0 only if demonstrably IC-only with no headroom.
 4. **Regret test** (0–1): Would the candidate regret not applying in 2 years?
 
 Passive search threshold: only recommend "apply" if passive score >= profile.yml `passive_search_threshold`.

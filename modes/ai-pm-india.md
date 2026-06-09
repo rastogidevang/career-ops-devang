@@ -45,13 +45,15 @@ Flag: "If the role is below Senior equivalent, applying may limit negotiating le
 
 ### Block 3: Compensation Analysis (Weight: 20%)
 
+**India norm:** Most Indian companies do not disclose compensation in JDs. A silent JD is not a red flag — it is the default. Never score comp low solely because the JD is silent. Run a WebSearch (`"{Company} Senior Product Manager Salary India"` or `site:glassdoor.com OR site:ambitionbox.com`) before scoring. If nothing useful found, default to neutral.
+
 AI PM roles have a wide comp range. Segment:
 - Global AI labs (Anthropic, OpenAI India): likely USD-denominated or USD-parity INR. High ESOP value.
 - Indian AI startups (Sarvam, Krutrim): Series A/B stage — lower base, higher equity, higher risk
 - Fintech+AI (Razorpay AI, Juspay AI): similar to fintech PM band + AI premium
 - GCCs with AI mandate: stable, below startup, good for risk-averse transition
 
-For equity in early-stage Indian AI startups: note that liquidity is 5–8 year horizon. Flag if the base alone doesn't meet profile.yml `target_ctc_min_lpa`.
+For equity in early-stage Indian AI startups: note that liquidity is 5–8 year horizon. Flag if the base alone doesn't meet profile.yml `target_ctc_min_lpa` (₹55L).
 
 ### Block 4: Company and Stage Intelligence (Weight: 20%)
 
@@ -91,7 +93,7 @@ STAR stories to surface from cv.md that are most relevant:
 
 ## Passive Search Modifier
 
-Same passive scoring framework as fintech-pm.md, with one addition:
+Same passive scoring framework as fintech-pm.md (including the India comp norm and GPM-calibrated growth ceiling), with one addition:
 
 **AI-specific question:** Does this role give the candidate AI PM *title* history? For a transitioning PM, a role with "AI Product Manager" in the title is worth more strategically than a slightly higher-comp role with "Senior PM" at an AI company. Flag this in the recommendation.
 
