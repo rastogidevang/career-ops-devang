@@ -70,8 +70,8 @@ for (const line of lines) {
   if (isNaN(num)) continue;
   entries.push({
     num, date: parts[2], company: parts[3], role: parts[4],
-    score: parts[5], status: parts[6], pdf: parts[7], report: parts[8],
-    notes: parts[9] || '',
+    score: parts[5], gls: parts[6], status: parts[7], pdf: parts[8], report: parts[9],
+    notes: parts[10] || '',
   });
 }
 
