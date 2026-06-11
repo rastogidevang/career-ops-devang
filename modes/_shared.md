@@ -16,6 +16,7 @@
 | article-digest.md | `article-digest.md` (if exists) | ALWAYS (detailed proof points) |
 | profile.yml | `config/profile.yml` | ALWAYS (candidate identity and targets) |
 | _profile.md | `modes/_profile.md` | ALWAYS (user archetypes, narrative, negotiation) |
+| writing-samples/ | `writing-samples/` | When generating candidate-facing text — check `_profile.md` for cached `## Writing Style` first; only scan files if absent |
 
 **RULE: NEVER hardcode metrics from proof points.** Read them from cv.md + article-digest.md at evaluation time.
 **RULE: For article/project metrics, article-digest.md takes precedence over cv.md.**
@@ -40,7 +41,7 @@ The evaluation uses 6 blocks (A-F) with a global score of 1-5:
 - 4.5+ → Strong match, recommend applying immediately
 - 4.0-4.4 → Good match, worth applying
 - 3.5-3.9 → Decent but not ideal, apply only if specific reason
-- Below 3.5 → Recommend against applying (see Ethical Use in CLAUDE.md)
+- Below 3.5 → Recommend against applying (see Ethical Use in AGENTS.md)
 
 ## Posting Legitimacy (Block G)
 
@@ -82,10 +83,8 @@ Classify every offer into one of these types (or hybrid of 2):
 | AI Solutions Architect | "architecture", "enterprise", "integration", "design", "systems" |
 | AI Forward Deployed | "client-facing", "deploy", "prototype", "fast delivery", "field" |
 | AI Transformation | "change management", "adoption", "enablement", "transformation" |
-| fintech-pm | "UPI", "NPCI", "payment gateway", "NACH", "IMPS", "PCI-DSS", "RBI", "fintech", "BFSI", "lending", "credit product" — OR known Indian fintech company |
-| ai-pm-india | "LLM", "generative AI", "AI product", "evals", "RAG", "agentic", "foundation model", "Claude", "Gemini" — OR known AI-native company |
 
-After detecting archetype, read `modes/_profile.md` for the user's specific framing and proof points for that archetype. For `fintech-pm` load `modes/fintech-pm.md`; for `ai-pm-india` load `modes/ai-pm-india.md`.
+After detecting archetype, read `modes/_profile.md` for the user's specific framing and proof points for that archetype.
 
 ## Global Rules
 
@@ -126,13 +125,90 @@ After detecting archetype, read `modes/_profile.md` for the user's specific fram
 | Read | cv.md, _profile.md, article-digest.md, cv-template.html |
 | Write | Temporary HTML for PDF, applications.md, reports .md |
 | Edit | Update tracker |
-| Canva MCP | Optional visual CV generation. Duplicate base design, edit text, export PDF. Requires `canva_resume_design_id` in profile.yml. |
+| Canva MCP | Optional visual CV generation. Duplicate base design, edit text, export PDF. Requires `cv.canva_resume_design_id` in profile.yml. |
 | Bash | `node generate-pdf.mjs` |
 
 ### Time-to-offer priority
 - Working demo + metrics > perfection
 - Apply sooner > learn more
 - 80/20 approach, timebox everything
+
+---
+
+## Writing Style Calibration
+
+**Check `_profile.md` first.** If a `## Writing Style` section exists there, use it directly — do not re-scan the writing-samples files. Re-scanning is only needed when new samples are added or the user explicitly asks to recalibrate.
+
+**When to apply:** Before generating any text the user will send or publish — cover letters, LinkedIn outreach, application form answers, follow-up emails, executive summaries, profile blurbs. Does NOT apply to internal evaluation reports (A–F blocks, scores, analysis).
+
+**If no cached style in `_profile.md`:** Read all files in `writing-samples/`, **skipping any file named `README.md`**. If no user-provided samples are found, skip style calibration and gently note — once, without pressure — that adding a writing sample (e.g. a past cover letter, a LinkedIn About section, any professional writing) would help tailor outputs to their voice. If samples exist, extract the markers below and write the result to `_profile.md` under `## Writing Style` so future sessions skip this step.
+
+### What to extract
+
+**Tone & register**
+- Formal vs. conversational
+- Confident vs. hedging (watch for qualifiers like "I think", "perhaps", "somewhat")
+- Warm vs. transactional
+- Degree of self-promotion — does the user undersell, match, or lead with achievements?
+
+**Sentence structure**
+- Average sentence length — short and punchy or long and layered?
+- Use of fragments for emphasis
+- Clause nesting and complexity
+- How sentences open — subject-first, action-first, context-first?
+
+**Punctuation habits**
+- Em dashes, en dashes, or parentheses for asides?
+- Oxford comma or not?
+- Ellipses — used or avoided?
+- Exclamation marks — never, sparingly, or freely?
+- Semicolons vs. full stops to join related ideas
+
+**Vocabulary**
+- Technical density — how much jargon per paragraph?
+- Preferred synonyms (e.g. "built" vs. "developed" vs. "engineered")
+- Words or phrases the user reaches for repeatedly — keep them
+- Words that never appear — don't introduce them
+
+**Paragraph and structure patterns**
+- Paragraph length — one-liners or developed blocks?
+- Bullet-heavy or prose-heavy?
+- How ideas are sequenced — problem → solution, result-first, chronological?
+- Use of headers within longer pieces
+
+**Voice signatures**
+- First-person patterns — "I led", "we built", "our team"?
+- Active vs. passive ratio
+- Habitual openers and closers
+- Rhetorical moves — does the user ask questions, use contrast, tell micro-stories?
+
+### Rules
+
+- **Only extract what is demonstrably present.** Do not infer style from a single data point.
+- **Idiosyncratic choices are intentional.** Unconventional punctuation or phrasing is the user's voice — preserve it, do not correct it.
+- **If samples conflict**, weight the most recent or most similar-context file.
+- **If samples are sparse**, apply what can be reliably extracted and fall back to defaults for the rest.
+- **Style calibration applies to tone and structure only.** Do not import content, claims, or metrics from samples into CVs, reports, or evaluations.
+- **No verbatim copying or personal identifiers.** Store only abstract style descriptors (tone, structure, vocabulary preferences). Do not quote user sentences verbatim and do not retain personal identifiers (names, emails, phone numbers) from writing samples. "Preserve idiosyncratic choices" applies to stylistic traits only.
+
+### Persisting the extracted style
+
+After scanning (excluding any `README.md` files), write to `modes/_profile.md` only if at least one user-provided sample was found: find the existing `## Writing Style` section and replace the entire block up to the next `##` heading (or EOF) with the new content. If no `## Writing Style` section exists, append it. This ensures there is always exactly one canonical section. If no samples were found after filtering, do not write or modify the section.
+
+```markdown
+## Writing Style
+
+_Extracted from writing-samples/ on {date}. Re-run if new samples are added._
+
+**Tone:** {e.g. conversational, confident, no hedging qualifiers}
+**Sentence length:** {e.g. short and punchy, avg 12 words}
+**Openings:** {e.g. action-first, subject-first}
+**Punctuation:** {e.g. em dashes for asides, Oxford comma, no ellipses}
+**Vocabulary:** {e.g. prefers "built"/"ran"/"cut" over "developed"/"led"/"reduced"}
+**Structure:** {e.g. prose-heavy, result-first sequencing}
+**Voice:** {e.g. "I led", active voice dominant, no rhetorical questions}
+**Avoid:** {words or patterns absent from samples}
+```
 
 ---
 
@@ -161,46 +237,3 @@ These rules apply to ALL generated text that ends up in candidate-facing documen
 - "Cut p95 latency from 2.1s to 380ms" beats "improved performance"
 - "Postgres + pgvector for retrieval over 12k docs" beats "designed scalable RAG architecture"
 - Name tools, projects, and customers when allowed
-
----
-
-## Passive Search Protocol
-
-The user is currently employed at PhonePe as a Senior PM. `search_mode: passive` is set in profile.yml.
-
-**What this means for every evaluation:**
-- The bar for recommending "apply" is higher than for an active job seeker
-- Always compute the passive score (see fintech-pm.md and ai-pm-india.md for the scoring rubric)
-- Always ask: "Is this worth leaving a senior role at India's largest payments platform?"
-- Never suggest applying to a role that doesn't clear `passive_search_threshold` from profile.yml
-- If a role is interesting but below threshold, output: "Monitor — revisit if situation changes"
-
-## Dual-Track CV Awareness
-
-This user has two CV framings defined in profile.yml:
-- **ai_pm track:** Lead with AI product work — Kimi k2.6 anomaly detection, Claude plugin, RAG travel agent
-- **fintech_pm track:** Lead with UPI scale, payment infrastructure, cross-functional fintech depth
-
-When generating a tailored CV or PDF:
-1. Read the archetype that triggered
-2. Load the corresponding `cv_tracks` section from profile.yml
-3. Reorder cv.md bullets accordingly — don't fabricate, reorder and reframe
-4. The first bullet under each role should be the most relevant achievement for this track
-
-## Global Quality Gate (Anti-Slop)
-
-Before outputting any career document (CV, cover letter, STAR story, outreach message):
-- Check for banned phrases (see modes/intake.md for the full list)
-- If found: rewrite that sentence before delivering
-- Documents below quality threshold are never shown to the user — rewrite first
-
-This is a non-negotiable quality standard. It protects the user's professional reputation.
-
-## Profile Reference
-
-Key facts loaded from config/profile.yml and cv.md at evaluation time:
-- Current company: PhonePe
-- Domain expertise: UPI, payment infrastructure, NPCI ecosystem
-- AI fluency: Kimi k2.6 (on-premises), Claude Code, Claude plugin, RAG, LLM-as-a-Judge evals
-- Location: Bengaluru (remote-friendly, not open to relocation)
-- Search posture: Passive — high bar, selective applications only
