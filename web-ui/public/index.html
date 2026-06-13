@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>career-ops — command center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Sets data-theme on <html> BEFORE the stylesheet loads to avoid
+         a flash of the wrong colour scheme. -->
+    <script src="/js/lib/theme-bootstrap.js"></script>
+    <link rel="stylesheet" href="/css/app.css" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23FF385C'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Arial' font-size='18' font-weight='bold' fill='white'%3Eco%3C/text%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <!-- v1.18.0 — WCAG 2.4.1 (skip link). First focusable on every page;
+         lets keyboard users jump past the persistent sidebar to the
+         content. Visually hidden via .skip-link until it receives focus. -->
+    <a href="#content" class="skip-link" data-i18n="a11y.skipToContent">Skip to main content</a>
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+      <!-- v1.27.0 PR-D: brand is a plain title, not a link.
+           The nav item below already links to the dashboard route;
+           wrapping the brand as a second link produced a duplicate
+           AT announcement and a useless tab stop. -->
+      <div class="logo">
+        <span class="logo-mark">co</span>
+        <span class="logo-text">career-ops</span>
+      </div>
+
+      <nav class="nav">
+        <a class="nav-item" href="#/dashboard" data-route="dashboard">
+          <span class="nav-ico">◆</span> <span data-i18n="nav.dashboard">Dashboard</span>
+        </a>
+
+        <div class="nav-group" data-i18n="nav.group.sourcing">Sourcing</div>
+        <a class="nav-item" href="#/scan" data-route="scan">
+          <span class="nav-ico">◇</span> <span data-i18n="nav.scan">Scan</span>
+        </a>
+        <a class="nav-item" href="#/pipeline" data-route="pipeline">
+          <span class="nav-ico">▤</span> <span data-i18n="nav.pipeline">Pipeline</span>
+        </a>
+        <a class="nav-item" href="#/auto" data-route="auto">
+          <span class="nav-ico">✨</span> <span data-i18n="nav.auto">Auto-pipeline</span>
+        </a>
+
+        <div class="nav-group" data-i18n="nav.group.decision">Decision</div>
+        <a class="nav-item" href="#/evaluate" data-route="evaluate">
+          <span class="nav-ico">▷</span> <span data-i18n="nav.evaluate">Evaluate</span>
+        </a>
+        <a class="nav-item" href="#/batch" data-route="batch">
+          <span class="nav-ico">⇶</span> <span data-i18n="nav.batch">Batch evaluate</span>
+        </a>
+        <a class="nav-item" href="#/deep" data-route="deep">
+          <span class="nav-ico">⌕</span> <span data-i18n="nav.deep">Deep research</span>
+        </a>
+        <a class="nav-item" href="#/project" data-route="project">
+          <span class="nav-ico">✦</span> <span data-i18n="nav.project">Project</span>
+        </a>
+        <a class="nav-item" href="#/training" data-route="training">
+          <span class="nav-ico">▣</span> <span data-i18n="nav.training">Training</span>
+        </a>
+
+        <div class="nav-group" data-i18n="nav.group.application">Application</div>
+        <a class="nav-item" href="#/apply" data-route="apply">
+          <span class="nav-ico">→</span> <span data-i18n="nav.apply">Apply checklist</span>
+        </a>
+        <a class="nav-item" href="#/tracker" data-route="tracker">
+          <span class="nav-ico">≡</span> <span data-i18n="nav.tracker">Tracker</span>
+        </a>
+        <a class="nav-item" href="#/followup" data-route="followup">
+          <span class="nav-ico">↻</span> <span data-i18n="nav.followup">Follow-up</span>
+        </a>
+
+        <div class="nav-group" data-i18n="nav.group.networking">Networking</div>
+        <a class="nav-item" href="#/contacto" data-route="contacto">
+          <span class="nav-ico">✉</span> <span data-i18n="nav.contacto">Outreach</span>
+        </a>
+        <a class="nav-item" href="#/interview-prep" data-route="interview-prep">
+          <span class="nav-ico">★</span> <span data-i18n="nav.interviewPrep">Interview prep</span>
+        </a>
+
+        <div class="nav-group" data-i18n="nav.group.analytics">Analytics</div>
+        <a class="nav-item" href="#/patterns" data-route="patterns">
+          <span class="nav-ico">▩</span> <span data-i18n="nav.patterns">Patterns</span>
+        </a>
+        <a class="nav-item" href="#/reports" data-route="reports">
+          <span class="nav-ico">▦</span> <span data-i18n="nav.reports">Reports</span>
+        </a>
+        <a class="nav-item" href="#/activity" data-route="activity">
+          <span class="nav-ico">⌚</span> <span data-i18n="nav.activity">Activity</span>
+        </a>
+
+        <div class="nav-group" data-i18n="nav.group.setup">Setup</div>
+        <a class="nav-item" href="#/cv" data-route="cv">
+          <span class="nav-ico">✎</span> <span data-i18n="nav.cv">CV</span>
+        </a>
+        <a class="nav-item" href="#/profile" data-route="profile">
+          <span class="nav-ico">⚙</span> <span data-i18n="nav.profile">Profile</span>
+        </a>
+        <a class="nav-item" href="#/config" data-route="config">
+          <span class="nav-ico">⚒</span> <span data-i18n="nav.config">App settings</span>
+        </a>
+        <a class="nav-item" href="#/health" data-route="health">
+          <span class="nav-ico">❤</span> <span data-i18n="nav.health">Health</span>
+        </a>
+        <a class="nav-item" href="#/help" data-route="help">
+          <span class="nav-ico">?</span> <span data-i18n="nav.help">Help</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="lang-switcher" id="lang-switcher"></div>
+        <div class="version" id="footer-version">v…</div>
+        <div class="hint" data-i18n="top.langhint">CTRL+K — search</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div id="conn-banner" class="conn-banner" hidden role="status" aria-live="polite">
+        <span class="conn-msg" data-i18n="conn.down">Server is not responding.</span>
+        <button class="btn btn-sm btn-dark" id="conn-refresh-btn" data-i18n="common.refresh">Refresh</button>
+      </div>
+      <!-- v1.55.3 (UX-2) — 4-provider OR onboarding. Populated by
+           app.js from /api/status/providers: red banner when 0 keys,
+           subtle active-provider chip when ≥1. Hidden until resolved. -->
+      <div id="onboarding-banner" hidden role="status" aria-live="polite"></div>
+      <header class="topbar" role="banner">
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle menu" aria-controls="sidebar" aria-expanded="false" type="button">☰</button>
+        <div class="searchbar" role="search">
+          <label for="global-search" class="visually-hidden" data-i18n="top.search.label">Search companies, roles, or URLs</label>
+          <input
+            type="text"
+            id="global-search"
+            data-i18n-placeholder="top.search"
+            placeholder="Find a company, role or URL…"
+            autocomplete="off"
+            data-i18n-aria-label="top.search.aria"
+            aria-label="Global search — Cmd+K to focus, paste a URL and Enter for auto-pipeline"
+          />
+          <!-- v1.56.4 — UX-N2: visible, platform-aware shortcut hint.
+               aria-hidden: the input's aria-label already conveys it
+               to AT, so the badge must not double-announce. Text is
+               filled at boot by app.js from data-mac / data-other. -->
+          <kbd class="kbd-shortcut" aria-hidden="true" data-mac="⌘K" data-other="Ctrl K"></kbd>
+        </div>
+        <div class="topbar-actions">
+          <!-- v1.58.34 — notifications bell. Opens the right-slide
+               drawer that re-surfaces the in-memory toast journal
+               captured by U-13 (v1.58.33). aria-haspopup=dialog +
+               aria-controls binds the bell to the drawer element. -->
+          <button class="notif-bell" id="notif-bell" type="button"
+            aria-haspopup="dialog" aria-controls="notif-drawer" aria-expanded="false"
+            data-i18n-aria-label="notif.bellAria"
+            aria-label="Notifications">🔔<span class="notif-badge" id="notif-badge" hidden>0</span></button>
+          <button class="theme-toggle" id="theme-toggle" type="button" data-i18n-title="top.themeToggle" data-i18n-aria-label="top.themeToggle">🌙</button>
+          <button class="btn btn-ghost" id="btn-doctor" data-i18n="top.doctor">Doctor</button>
+          <button class="btn btn-primary" id="btn-quick-scan" data-i18n="top.quickscan">Open Scan</button>
+        </div>
+      </header>
+      <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+
+      <section class="content" id="content" role="main" aria-live="polite" tabindex="-1">
+        <div class="loading" data-i18n="common.loading">Loading…</div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" hidden role="status" aria-live="assertive"></div>
+    <!-- v1.58.34 — notifications drawer. Stores the in-memory toast
+         journal (up to 50 entries). aria-modal=false: drawer overlays
+         but does not trap focus globally; Esc + backdrop click close
+         it. Localized title + empty-state via notif.* i18n keys. -->
+    <aside id="notif-drawer" class="notif-drawer" role="dialog" aria-modal="false" aria-labelledby="notif-title" hidden>
+      <div class="notif-drawer__head">
+        <h2 id="notif-title" data-i18n="notif.title">Notifications</h2>
+        <!-- UX-A12 (v1.58.60) — Clear all button purges every entry in
+             UI.getToastHistory() and closes-out the unread badge. Hidden
+             via [hidden] when the list is empty (avoids a no-op CTA). -->
+        <button class="notif-drawer__clear-all" id="notif-clear-all" type="button"
+                data-i18n="notif.clearAll" data-i18n-aria-label="notif.clearAllAria"
+                aria-label="Clear all notifications" hidden>Clear all</button>
+        <button class="notif-drawer__close" id="notif-close" type="button" data-i18n-aria-label="notif.closeAria" aria-label="Close notifications">×</button>
+      </div>
+      <ol class="notif-drawer__list" id="notif-list" role="list"></ol>
+      <p class="notif-drawer__empty" id="notif-empty" data-i18n="notif.empty">No notifications yet.</p>
+    </aside>
+    <div id="modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-backdrop" data-close aria-hidden="true"></div>
+      <div class="modal-card">
+        <header class="modal-header">
+          <h3 id="modal-title"></h3>
+          <button class="modal-close" data-close type="button" aria-label="Close dialog">×</button>
+        </header>
+        <div class="modal-body" id="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- i18n: per-locale tables (I18N-SPLIT v1.60.0) load first, then the
+         aliases map, then i18n-dict.js assembles them into window.__I18N_DICT,
+         then i18n.js consumes it. All synchronous <script src> — no build,
+         no fetch. Order matters: the assembler reads these globals. -->
+    <script src="/js/lib/locales/i18n-dict.en.js"></script>
+    <script src="/js/lib/locales/i18n-dict.es.js"></script>
+    <script src="/js/lib/locales/i18n-dict.pt-BR.js"></script>
+    <script src="/js/lib/locales/i18n-dict.ko.js"></script>
+    <script src="/js/lib/locales/i18n-dict.ja.js"></script>
+    <script src="/js/lib/locales/i18n-dict.ru.js"></script>
+    <script src="/js/lib/locales/i18n-dict.zh-CN.js"></script>
+    <script src="/js/lib/locales/i18n-dict.zh-TW.js"></script>
+    <script src="/js/lib/locales/i18n-dict.fr.js"></script>
+    <script src="/js/lib/locales/i18n-dict.aliases.js"></script>
+    <script src="/js/lib/i18n-dict.js"></script>
+    <script src="/js/lib/i18n.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/lib/skills.js"></script>
+    <script src="/js/lib/pdf-generate.js"></script>
+    <script src="/js/lib/auto-pipeline.js"></script>
+    <script src="/js/lib/modes-form.js"></script>
+    <script src="/js/router.js"></script>
+    <script src="/js/views/dashboard.js"></script>
+    <script src="/js/views/scan.js"></script>
+    <script src="/js/views/pipeline.js"></script>
+    <script src="/js/views/auto.js"></script>
+    <script src="/js/views/evaluate.js"></script>
+    <script src="/js/views/batch.js"></script>
+    <script src="/js/views/deep.js"></script>
+    <script src="/js/views/apply.js"></script>
+    <script src="/js/views/tracker.js"></script>
+    <script src="/js/views/reports.js"></script>
+    <script src="/js/views/cv.js"></script>
+    <script src="/js/views/settings.js"></script>
+    <script src="/js/views/health.js"></script>
+    <script src="/js/views/activity.js"></script>
+    <script src="/js/views/mode-page.js"></script>
+    <script src="/js/views/help.js"></script>
+    <script src="/js/views/config.js"></script>
+    <script src="/js/app.js"></script>
+  </body>
+</html>
