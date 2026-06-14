@@ -39,6 +39,10 @@ export function hasClaudeCli() {
  * Run a prompt through `claude --print` (non-interactive mode).
  * Writes the prompt to the child's stdin to handle large payloads safely.
  *
+ * @param {string} prompt
+ * @param {{ timeoutMs?: number, allowedTools?: string[] }} opts
+ *   allowedTools: tools to enable (e.g. ['WebSearch']). Without this flag
+ *   the CLI runs in a piped context that denies tool use by default.
  * @returns {{ markdown: string, usage: null, error: string|null }}
  */
 export async function runClaudeCli(prompt, opts = {}) {
@@ -49,7 +53,12 @@ export async function runClaudeCli(prompt, opts = {}) {
     let stderr = '';
     let settled = false;
 
-    const child = spawn('claude', ['--print'], {
+    const args = ['--print'];
+    if (opts.allowedTools && opts.allowedTools.length) {
+      args.push('--allowedTools', opts.allowedTools.join(','));
+    }
+
+    const child = spawn('claude', args, {
       stdio: ['pipe', 'pipe', 'pipe'],
       env: { ...process.env },
     });

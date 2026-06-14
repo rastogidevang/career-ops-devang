@@ -122,10 +122,14 @@ After searching, return ONLY a valid JSON array (no other text, no markdown fenc
 [{"url":"https://...","title":"Job Title","company":"Company Name","location":"City or Remote"}]
 
 Rules:
-- Only include direct job posting URLs (company career pages, ATS board pages — not search engine result pages)
-- Each job must have a real, specific URL linking to the individual posting
-- Skip duplicate companies if they appear multiple times for the same role
-- If no valid job postings are found, return exactly: []
+- Include any job-related URL from a legitimate job board or company career page:
+  individual postings (preferred) OR listing/search-result pages on Naukri, LinkedIn,
+  iimjobs, Foundit, Cutshort, Wellfound, Instahyre, AngelList, Indeed India, etc.
+- Do NOT include generic search engine result pages (google.com, bing.com, etc.)
+- Each entry must have a real URL, a descriptive title, a company name, and a location
+- For listing pages, set company to the job board name (e.g. "Naukri" or "LinkedIn India")
+- Aim for 5–10 distinct results; skip exact duplicate URLs
+- If no job-related URLs are found at all, return exactly: []
 `;
 }
 
@@ -176,7 +180,7 @@ export async function runWsScan(opts = {}) {
     log('stdout', `  [${i + 1}/${queries.length}] ${q.name}`);
 
     const prompt = buildSearchPrompt(q);
-    const r = await runClaudeCli(prompt, { timeoutMs: 90_000 });
+    const r = await runClaudeCli(prompt, { timeoutMs: 90_000, allowedTools: ['WebSearch'] });
 
     if (r.error) {
       const errMsg = `${q.name}: ${r.error}`;
