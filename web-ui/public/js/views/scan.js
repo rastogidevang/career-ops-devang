@@ -365,8 +365,16 @@ Router.register('scan', async () => {
     });
   }
 
+  function runWsScan() {
+    lastRunFn = runWsScan;
+    const params = new URLSearchParams();
+    params.set('source', 'websearch');
+    if (dryRun.checked) params.set('dryRun', '1');
+    streamTo(consoleEl, '/api/stream/scan?' + params.toString(), 'Web Search', refreshResults);
+  }
+
   // Render the rich table of last-scan results
-  let lastResults = { en: null, ru: null };
+  let lastResults = { en: null, ru: null, ws: null };
   // Active chip selections (multi-select, intersection across categories)
   const activeTech = new Set();
   const activeLevel = new Set();
@@ -376,7 +384,7 @@ Router.register('scan', async () => {
     try {
       lastResults = await API.get('/api/scan-results');
     } catch {
-      lastResults = { en: null, ru: null };
+      lastResults = { en: null, ru: null, ws: null };
     }
     renderResults();
     // F-011: notify the Active-Companies counter (and any other listener)
@@ -387,9 +395,11 @@ Router.register('scan', async () => {
     const scope = filterScope.value || 'all';
     const en = lastResults.en;
     const ru = lastResults.ru;
+    const ws = lastResults.ws;
     const enRows = (scope === 'fresh' ? en?.fresh : (en?.filtered || en?.fresh)) || [];
     const ruRows = (scope === 'fresh' ? ru?.fresh : (ru?.filtered || ru?.fresh)) || [];
-    return [...enRows, ...ruRows];
+    const wsRows = (scope === 'fresh' ? ws?.fresh : (ws?.filtered || ws?.fresh)) || [];
+    return [...enRows, ...ruRows, ...wsRows];
   }
   // v1.30.0 — replaces the hardcoded 200-row truncation. UI.paginate
   // auto-clamps the page when filters narrow the list (so the user
@@ -408,9 +418,12 @@ Router.register('scan', async () => {
     // adapter geography isn't baked into the UI (F-010).
     const atsLabel = t('scan.atsBadge', 'ATS adapters');
     const regionalLabel = t('scan.regionalBadge', 'Regional portals');
+    const wsLabel = t('scan.wsBadge', 'Web search (India)');
+    const wsWhen = lastResults.ws?.when ? new Date(lastResults.ws.when).toLocaleString('ru') : null;
     const summary = c('div', { className: 'flex gap-3 mb-3', style: { flexWrap: 'wrap' } }, [
       enWhen && c('span', { className: 'badge badge-info' }, `${atsLabel} · ${enWhen} · ${lastResults.en.fresh?.length || 0} new / ${lastResults.en.filtered?.length || 0} matching`),
       ruWhen && c('span', { className: 'badge badge-info' }, `${regionalLabel} · ${ruWhen} · ${lastResults.ru.fresh?.length || 0} new / ${lastResults.ru.filtered?.length || 0} matching`),
+      wsWhen && c('span', { className: 'badge badge-info' }, `${wsLabel} · ${wsWhen} · ${lastResults.ws.fresh?.length || 0} new`),
     ]);
     resultsEl.appendChild(summary);
 
@@ -614,6 +627,11 @@ Router.register('scan', async () => {
         // expectation is set on hover.
         scanBtn,
         stopBtn,
+        c('button', {
+          className: 'btn btn-secondary',
+          onClick: () => runWsScan(),
+          title: t('scan.btnWsTitle', 'Search India job boards (Naukri, Cutshort, iimjobs, Foundit, LinkedIn India, Wellfound…) via Claude CLI WebSearch. Requires claude installed.'),
+        }, '🔍 ' + t('scan.btnWebSearch', 'Web Search')),
         c('button', { className: 'btn btn-ghost', onClick: () => Router.go('/pipeline') }, t('scan.btnPipe')),
       ]),
     ]),
@@ -843,6 +861,73 @@ Router.register('scan', async () => {
           ? c('div', { className: 'empty' }, t('scan.allDisabled'))
           : c('div', null, [toggleBtn, filterIn, list]),
       ]);
+    })(),
+
+    // ─── WebSearch query list (India job boards) ─────────────────────────────
+    // Shows users which search_queries from portals.yml will run when they
+    // click "Web Search". Loaded from /api/scan/search-queries on mount.
+    (() => {
+      const wsList = document.createElement('div');
+      wsList.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;padding:10px 0 4px;';
+
+      let wsExpanded = false;
+      let wsQueries = [];
+
+      function renderWsQueries() {
+        wsList.innerHTML = '';
+        if (!wsQueries.length) {
+          wsList.appendChild(c('div', { style: { color: 'var(--foggy)', fontSize: '13px' } },
+            t('scan.wsNoQueries', 'No search queries configured in portals.yml. Add search_queries entries to enable WebSearch scanning.')));
+          return;
+        }
+        wsQueries.forEach((q) => {
+          const chip = c('span', {
+            title: q.query || '',
+            style: {
+              display: 'inline-block', padding: '3px 10px', borderRadius: '20px',
+              fontSize: '12px', fontWeight: 500,
+              background: 'rgba(99,102,241,.12)', color: 'var(--accent, #6366f1)',
+              border: '1px solid rgba(99,102,241,.25)', cursor: 'help',
+              whiteSpace: 'nowrap', maxWidth: '240px',
+              overflow: 'hidden', textOverflow: 'ellipsis',
+            },
+          }, q.name || q.query || '?');
+          wsList.appendChild(chip);
+        });
+      }
+
+      const wsToggleBtn = c('button', {
+        className: 'btn btn-ghost btn-sm',
+        title: t('scan.wsQueriesHelp', 'Search queries that run when you click Web Search. Each query searches India-specific job boards (Naukri, iimjobs, Cutshort, Foundit, LinkedIn India, Wellfound…) via Claude CLI WebSearch.'),
+        onClick: () => {
+          wsExpanded = !wsExpanded;
+          wsList.style.display = wsExpanded ? '' : 'none';
+          wsToggleBtn.textContent = (wsExpanded ? '▾ ' : '▸ ') + t('scan.wsQueriesTitle', 'Web Search queries (India)') + ` · ${wsQueries.length}`;
+          if (wsExpanded && wsQueries.length === 0) {
+            fetch('/api/scan/search-queries')
+              .then((r) => r.json())
+              .then((d) => {
+                wsQueries = d.queries || [];
+                wsToggleBtn.textContent = (wsExpanded ? '▾ ' : '▸ ') + t('scan.wsQueriesTitle', 'Web Search queries (India)') + ` · ${wsQueries.length}`;
+                renderWsQueries();
+              })
+              .catch(() => {});
+          }
+        },
+      }, '▸ ' + t('scan.wsQueriesTitle', 'Web Search queries (India)') + ' · …');
+
+      wsList.style.display = 'none';
+
+      // Eagerly load the count on mount so the button shows N instead of "…".
+      fetch('/api/scan/search-queries')
+        .then((r) => r.json())
+        .then((d) => {
+          wsQueries = d.queries || [];
+          wsToggleBtn.textContent = '▸ ' + t('scan.wsQueriesTitle', 'Web Search queries (India)') + ` · ${wsQueries.length}`;
+        })
+        .catch(() => {});
+
+      return c('div', { className: 'card mt-3' }, [wsToggleBtn, wsList]);
     })(),
   ]);
 });

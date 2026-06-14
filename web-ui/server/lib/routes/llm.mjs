@@ -22,6 +22,7 @@ import { slugify, today } from '../parsers.mjs';
 import { runNodeScript } from '../runner.mjs';
 import { runAnthropic, hasAnthropicKey, hasGeminiKey } from '../anthropic.mjs';
 import { runOpenAI, runQwen, runOpenRouter, hasOpenAIKey, hasQwenKey, hasOpenRouterKey } from '../openai.mjs';
+import { runClaudeCli, hasClaudeCli } from '../claude-cli.mjs';
 import { providerOrder } from '../env-config.mjs';
 import { sanitizeJobDescription, sanitizePathName } from '../security.mjs';
 import { cleanLlmMarkdown } from '../llm-output.mjs';
@@ -42,8 +43,8 @@ import {
 function _provGate() {
   const o = providerOrder();
   return {
-    wantAnthropic: o.includes('anthropic'), wantGemini: o.includes('gemini'),
-    wantOpenAI: o.includes('openai'), wantQwen: o.includes('qwen'),
+    wantAnthropic: o.includes('anthropic'), wantClaudeCli: o.includes('claude-cli'),
+    wantGemini: o.includes('gemini'), wantOpenAI: o.includes('openai'), wantQwen: o.includes('qwen'),
     wantOpenRouter: o.includes('openrouter'),
   };
 }
@@ -135,6 +136,20 @@ export function registerLlmRoutes(app) {
       const r = await runAnthropic(fullPrompt, { maxTokens: 8192 });
       if (r.error) return res.status(502).json({ mode: 'anthropic', prompt: promptText, error: r.error, saved });
       return res.json({ mode: 'anthropic', prompt: promptText, markdown: r.markdown, usage: r.usage, saved });
+    }
+
+    if (_provGate().wantClaudeCli && hasClaudeCli()) {
+      const ctx = bundleProjectContext({ modeSlugs: ['_shared', 'oferta'], claudeCli: true });
+      const fullPrompt = ctx + promptText;
+      if (fullPrompt.length > PROMPT_SIZE_SOFT_CAP) {
+        return res.status(413).json({
+          error: 'prompt too large',
+          details: [`assembled prompt is ${fullPrompt.length} bytes; soft cap is ${PROMPT_SIZE_SOFT_CAP}. Truncate the JD or shrink your CV.`],
+        });
+      }
+      const r = await runClaudeCli(fullPrompt, { maxTokens: 8192 });
+      if (r.error) return res.status(502).json({ mode: 'claude-cli', prompt: promptText, error: r.error, saved });
+      return res.json({ mode: 'claude-cli', prompt: promptText, markdown: r.markdown, usage: r.usage, saved });
     }
 
     if (_provGate().wantGemini && hasGeminiKey()) {
@@ -236,6 +251,19 @@ export function registerLlmRoutes(app) {
           });
         }
         const r = await runAnthropic(fullPrompt, { maxTokens: 8192 });
+        if (r.error) return res.status(502).json({ mode, prompt, error: r.error });
+        result = { markdown: r.markdown, code: 0 };
+      } else if (_provGate().wantClaudeCli && hasClaudeCli()) {
+        mode = 'claude-cli';
+        const ctx = bundleProjectContext({ modeSlugs: ['_shared', 'deep'], claudeCli: true });
+        const fullPrompt = ctx + prompt;
+        if (fullPrompt.length > PROMPT_SIZE_SOFT_CAP) {
+          return res.status(413).json({
+            error: 'prompt too large',
+            details: [`assembled prompt is ${fullPrompt.length} bytes; soft cap is ${PROMPT_SIZE_SOFT_CAP}.`],
+          });
+        }
+        const r = await runClaudeCli(fullPrompt, { maxTokens: 8192 });
         if (r.error) return res.status(502).json({ mode, prompt, error: r.error });
         result = { markdown: r.markdown, code: 0 };
       } else if (_provGate().wantGemini && hasGeminiKey()) {
@@ -354,6 +382,19 @@ export function registerLlmRoutes(app) {
         const r = await runAnthropic(fullPrompt);
         if (r.error) return res.status(502).json({ mode: 'anthropic', slug, prompt, error: r.error });
         return res.json({ mode: 'anthropic', slug, prompt, markdown: r.markdown, usage: r.usage });
+      }
+      if (_provGate().wantClaudeCli && hasClaudeCli()) {
+        const ctx = bundleProjectContext({ modeSlugs: ['_shared'], claudeCli: true });
+        const fullPrompt = ctx + prompt;
+        if (fullPrompt.length > PROMPT_SIZE_SOFT_CAP) {
+          return res.status(413).json({
+            error: 'prompt too large',
+            details: [`assembled prompt is ${fullPrompt.length} bytes; soft cap is ${PROMPT_SIZE_SOFT_CAP}.`],
+          });
+        }
+        const r = await runClaudeCli(fullPrompt);
+        if (r.error) return res.status(502).json({ mode: 'claude-cli', slug, prompt, error: r.error });
+        return res.json({ mode: 'claude-cli', slug, prompt, markdown: r.markdown, usage: r.usage });
       }
       if (_provGate().wantGemini && hasGeminiKey()) {
         const tmp = projPath('output', `web-${slug}-${Date.now()}.txt`);

@@ -18,6 +18,7 @@
  */
 import { runRuScan, loadConfig as loadRuConfig } from '../ru-scanner.mjs';
 import { runEnScan, loadLastScan } from '../en-scanner.mjs';
+import { runWsScan, loadSearchQueries } from '../ws-scanner.mjs';
 import { getLastWorkdayFallback } from '../sources/workday.mjs';
 import { SOURCES } from '../sources/registry.mjs';
 
@@ -88,6 +89,8 @@ export function registerScanRoutes(app) {
       await driveOne({ res, send, runner: runEnScan, label: 'en-scanner', query: req.query });
     } else if (source === 'regional') {
       await driveOne({ res, send, runner: runRuScan, label: 'ru-scanner', query: req.query });
+    } else if (source === 'websearch') {
+      await driveOne({ res, send, runner: runWsScan, label: 'ws-scanner', query: req.query });
     } else if (source === 'both' || source === '') {
       // v1.29.2 — first phase's `done` carries `final: false` so the SSE
       // client keeps the EventSource open for the regional phase.
@@ -96,7 +99,7 @@ export function registerScanRoutes(app) {
         await driveOne({ res, send, runner: runRuScan, label: 'ru-scanner', query: req.query, final: true });
       }
     } else {
-      send('error', { message: `unknown source "${source}" (expected: ats | regional | both)` });
+      send('error', { message: `unknown source "${source}" (expected: ats | regional | websearch | both)` });
     }
     if (!res.writableEnded) res.end();
   });
@@ -125,6 +128,18 @@ export function registerScanRoutes(app) {
   app.get('/api/scan/sources', (_req, res) => {
     res.set('Cache-Control', 'public, max-age=60');
     res.json({ sources: SOURCES });
+  });
+
+  // ─── WebSearch query list (for UI display) ───
+  // Returns the enabled search_queries from portals.yml so the SPA can
+  // show the user which India-specific boards will be searched.
+  app.get('/api/scan/search-queries', (_req, res) => {
+    try {
+      res.set('Cache-Control', 'public, max-age=60');
+      res.json({ queries: loadSearchQueries() });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
   });
 
   // ─── Latest scan results (for table view in UI) ───

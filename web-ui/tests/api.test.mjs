@@ -226,6 +226,7 @@ test('POST /api/pipeline + DELETE round-trip', async () => {
 test('POST /api/evaluate without GEMINI_API_KEY → manual prompt', async () => {
   const prevKey = process.env.GEMINI_API_KEY;
   delete process.env.GEMINI_API_KEY;
+  process.env.DISABLE_CLAUDE_CLI = '1';
   try {
     const r = await post('/api/evaluate', {
       jd: 'About the role: looking for a Senior Backend Engineer with PHP and Go experience. Responsibilities include building services and reviewing code.',
@@ -235,6 +236,7 @@ test('POST /api/evaluate without GEMINI_API_KEY → manual prompt', async () => 
     assert.ok(r.body.prompt.includes('cv.md'));
   } finally {
     if (prevKey) process.env.GEMINI_API_KEY = prevKey;
+    delete process.env.DISABLE_CLAUDE_CLI;
   }
 });
 

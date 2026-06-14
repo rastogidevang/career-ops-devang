@@ -109,9 +109,14 @@ test('POST /api/deep without run:true returns manual prompt unchanged', async ()
 test('POST /api/deep with run:true but no GEMINI_API_KEY → still manual', async () => {
   // Without the key, requesting `run: true` cannot actually execute,
   // so we fall back to manual rather than 500-ing.
-  const r = await post('/api/deep', { company: 'Stripe', run: true });
-  assert.equal(r.status, 200);
-  assert.equal(r.body.mode, 'manual');
+  process.env.DISABLE_CLAUDE_CLI = '1';
+  try {
+    const r = await post('/api/deep', { company: 'Stripe', run: true });
+    assert.equal(r.status, 200);
+    assert.equal(r.body.mode, 'manual');
+  } finally {
+    delete process.env.DISABLE_CLAUDE_CLI;
+  }
 });
 
 test('POST /api/deep rejects missing company', async () => {

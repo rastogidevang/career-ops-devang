@@ -67,6 +67,19 @@ function loadSeenUrls() {
   return seen;
 }
 
+function loadSeenCompanyRoles() {
+  const seen = new Set();
+  try {
+    const text = readFileSync(PATHS.applications, 'utf8');
+    for (const m of text.matchAll(/^\|[^|]+\|[^|]+\|([^|]+)\|([^|]+)\|/gm)) {
+      const company = m[1].trim().toLowerCase();
+      const role = m[2].trim().toLowerCase();
+      if (company && role && company !== 'company') seen.add(`${company}::${role}`);
+    }
+  } catch {}
+  return seen;
+}
+
 function passesPositive(title, positives) {
   if (!positives.length) return true;
   const t = (title || '').toLowerCase();
@@ -119,6 +132,7 @@ export async function runEnScan(opts = {}) {
   // ranked higher.
   const boosts = (tf.seniority_boost || []).map((s) => String(s).toLowerCase());
   const seen = loadSeenUrls();
+  const seenCompanyRoles = loadSeenCompanyRoles();
 
   let companies = portals.tracked_companies || portals.companies || [];
   companies = companies.filter((c) => c.enabled !== false);
@@ -179,7 +193,11 @@ export async function runEnScan(opts = {}) {
       return hit ? { ...j, _boosted: true, _boostedBy: hit } : j;
     });
   const removedTitle = allRaw.length - filtered.length;
-  const fresh = filtered.filter((j) => !seen.has(j.url));
+  const fresh = filtered.filter((j) => {
+    if (seen.has(j.url)) return false;
+    const key = `${(j.company || '').trim().toLowerCase()}::${(j.title || '').trim().toLowerCase()}`;
+    return !seenCompanyRoles.has(key);
+  });
   const dup = filtered.length - fresh.length;
 
   log('stdout', '');
@@ -230,8 +248,12 @@ function appendToPipeline(jobs) {
 }
 function appendToHistory(jobs) {
   mkdirSync(PATHS.scanHistory.replace(/\/[^/]+$/, ''), { recursive: true });
+  const date = new Date().toISOString().slice(0, 10);
+  if (!existsSync(PATHS.scanHistory)) {
+    writeFileSync(PATHS.scanHistory, 'url\tfirst_seen\tportal\ttitle\tcompany\tstatus\n');
+  }
   const lines = jobs.map((j) =>
-    [new Date().toISOString().slice(0, 10), j.source, j.id, j.company, j.title, j.url]
+    [j.url, date, j.source, j.title, j.company, 'added']
       .map((x) => String(x ?? '').replace(/\t/g, ' '))
       .join('\t')
   );
@@ -241,7 +263,7 @@ function appendToHistory(jobs) {
 const LAST_SCAN_PATH = PATHS.applications.replace(/applications\.md$/, 'last-scan.json');
 
 export function saveLastScan(payload) {
-  let prev = { en: null, ru: null };
+  let prev = { en: null, ru: null, ws: null };
   try {
     prev = JSON.parse(readFileSync(LAST_SCAN_PATH, 'utf8'));
   } catch {}

@@ -83,37 +83,52 @@ async function withApp(fn) {
 
 test('GET /api/status/providers — 0 keys → activeProvider null, empty list', async () => {
   writeEnv(['# no provider keys']);
-  await withApp(async (base) => {
-    const r = await fetch(`${base}/api/status/providers`);
-    assert.equal(r.status, 200);
-    const j = await r.json();
-    assert.equal(j.activeProvider, null);
-    assert.deepEqual(j.keysConfigured, []);
-    assert.equal(j.activeModel, null);
-  });
+  process.env.DISABLE_CLAUDE_CLI = '1';
+  try {
+    await withApp(async (base) => {
+      const r = await fetch(`${base}/api/status/providers`);
+      assert.equal(r.status, 200);
+      const j = await r.json();
+      assert.equal(j.activeProvider, null);
+      assert.deepEqual(j.keysConfigured, []);
+      assert.equal(j.activeModel, null);
+    });
+  } finally {
+    delete process.env.DISABLE_CLAUDE_CLI;
+  }
 });
 
 test('GET /api/status/providers — one key set → that provider active + model', async () => {
   writeEnv(['OPENAI_API_KEY=sk-test-openai-key-value-1234567890',
     'OPENAI_MODEL=gpt-5-codex']);
-  await withApp(async (base) => {
-    const r = await fetch(`${base}/api/status/providers`);
-    const j = await r.json();
-    assert.equal(j.activeProvider, 'openai');
-    assert.ok(j.keysConfigured.includes('openai'));
-    assert.ok(!j.keysConfigured.includes('anthropic'));
-    assert.equal(j.activeModel, 'gpt-5-codex');
-  });
+  process.env.DISABLE_CLAUDE_CLI = '1';
+  try {
+    await withApp(async (base) => {
+      const r = await fetch(`${base}/api/status/providers`);
+      const j = await r.json();
+      assert.equal(j.activeProvider, 'openai');
+      assert.ok(j.keysConfigured.includes('openai'));
+      assert.ok(!j.keysConfigured.includes('anthropic'));
+      assert.equal(j.activeModel, 'gpt-5-codex');
+    });
+  } finally {
+    delete process.env.DISABLE_CLAUDE_CLI;
+  }
 });
 
 test('GET /api/status/providers — auto order prefers Anthropic over Gemini', async () => {
   writeEnv(['ANTHROPIC_API_KEY=sk-ant-test-aaaaaaaaaaaaaaaaaaaa',
     'GEMINI_API_KEY=AIzaTESTtesttesttesttesttesttesttest']);
-  await withApp(async (base) => {
-    const j = await (await fetch(`${base}/api/status/providers`)).json();
-    assert.equal(j.activeProvider, 'anthropic');
-    assert.deepEqual([...j.keysConfigured].sort(), ['anthropic', 'gemini']);
-  });
+  process.env.DISABLE_CLAUDE_CLI = '1';
+  try {
+    await withApp(async (base) => {
+      const j = await (await fetch(`${base}/api/status/providers`)).json();
+      assert.equal(j.activeProvider, 'anthropic');
+      assert.deepEqual([...j.keysConfigured].sort(), ['anthropic', 'gemini']);
+    });
+  } finally {
+    delete process.env.DISABLE_CLAUDE_CLI;
+  }
 });
 
 test.after(() => {

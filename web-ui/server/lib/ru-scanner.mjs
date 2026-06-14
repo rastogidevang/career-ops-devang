@@ -342,15 +342,12 @@ function appendToPipeline(jobs) {
 
 function appendToHistory(jobs) {
   mkdirSync(PATHS.scanHistory.replace(/\/[^/]+$/, ''), { recursive: true });
+  const date = new Date().toISOString().slice(0, 10);
+  if (!existsSync(PATHS.scanHistory)) {
+    writeFileSync(PATHS.scanHistory, 'url\tfirst_seen\tportal\ttitle\tcompany\tstatus\n');
+  }
   const lines = jobs.map((j) =>
-    [
-      new Date().toISOString().slice(0, 10),
-      j.source,
-      j.id,
-      j.company,
-      j.title,
-      j.url,
-    ]
+    [j.url, date, j.source, j.title, j.company, 'added']
       .map((x) => String(x ?? '').replace(/\t/g, ' '))
       .join('\t')
   );

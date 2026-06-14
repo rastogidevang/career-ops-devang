@@ -4773,6 +4773,72 @@
     "zh-TW": "所有公司已停用。",
     "fr": "Toutes les entreprises désactivées (enabled: false)."
   },
+  "scan.btnWebSearch": {
+    "en": "Web Search",
+    "es": "Búsqueda web",
+    "pt-BR": "Busca web",
+    "ko": "웹 검색",
+    "ja": "ウェブ検索",
+    "ru": "Поиск (India)",
+    "zh-CN": "网络搜索",
+    "zh-TW": "網路搜尋",
+    "fr": "Recherche web"
+  },
+  "scan.btnWsTitle": {
+    "en": "Search India job boards (Naukri, Cutshort, iimjobs, Foundit, LinkedIn India, Wellfound…) via Claude CLI WebSearch. Requires claude installed.",
+    "es": "Buscar portales de empleo de India (Naukri, Cutshort, iimjobs, Foundit, LinkedIn India, Wellfound…) con Claude CLI WebSearch. Requiere claude instalado.",
+    "pt-BR": "Buscar portais de emprego da Índia (Naukri, Cutshort, iimjobs, Foundit, LinkedIn India, Wellfound…) via Claude CLI WebSearch. Requer claude instalado.",
+    "ko": "Claude CLI WebSearch를 통해 인도 채용 사이트 (Naukri, Cutshort, iimjobs, Foundit, LinkedIn India, Wellfound…)를 검색합니다. claude 설치 필요.",
+    "ja": "Claude CLI WebSearch でインドの求人サイト (Naukri, Cutshort, iimjobs, Foundit, LinkedIn India, Wellfound…) を検索します。claude のインストールが必要です。",
+    "ru": "Поиск вакансий на индийских порталах (Naukri, Cutshort, iimjobs, Foundit, LinkedIn India, Wellfound…) через Claude CLI WebSearch. Требуется установленный claude.",
+    "zh-CN": "通过 Claude CLI WebSearch 搜索印度招聘平台（Naukri、Cutshort、iimjobs、Foundit、LinkedIn India、Wellfound…）。需要安装 claude。",
+    "zh-TW": "透過 Claude CLI WebSearch 搜尋印度招聘平台（Naukri、Cutshort、iimjobs、Foundit、LinkedIn India、Wellfound…）。需要安裝 claude。",
+    "fr": "Chercher des offres sur les sites indiens (Naukri, Cutshort, iimjobs, Foundit, LinkedIn India, Wellfound…) via Claude CLI WebSearch. Nécessite claude installé."
+  },
+  "scan.wsBadge": {
+    "en": "Web search (India)",
+    "es": "Búsqueda web (India)",
+    "pt-BR": "Busca web (Índia)",
+    "ko": "웹 검색 (인도)",
+    "ja": "ウェブ検索 (インド)",
+    "ru": "Веб-поиск (India)",
+    "zh-CN": "网络搜索（印度）",
+    "zh-TW": "網路搜尋（印度）",
+    "fr": "Recherche web (Inde)"
+  },
+  "scan.wsQueriesTitle": {
+    "en": "Web Search queries (India)",
+    "es": "Búsquedas web (India)",
+    "pt-BR": "Consultas WebSearch (Índia)",
+    "ko": "웹 검색 쿼리 (인도)",
+    "ja": "ウェブ検索クエリ (インド)",
+    "ru": "Запросы WebSearch (India)",
+    "zh-CN": "网络搜索查询（印度）",
+    "zh-TW": "網路搜尋查詢（印度）",
+    "fr": "Requêtes WebSearch (Inde)"
+  },
+  "scan.wsQueriesHelp": {
+    "en": "Search queries that run when you click Web Search. Each query searches India-specific job boards (Naukri, iimjobs, Cutshort, Foundit, LinkedIn India, Wellfound…) via Claude CLI WebSearch.",
+    "es": "Consultas que se ejecutan al hacer clic en Búsqueda web. Busca portales de empleo de India (Naukri, iimjobs, Cutshort, Foundit, LinkedIn India, Wellfound…) mediante Claude CLI WebSearch.",
+    "pt-BR": "Consultas executadas ao clicar em Busca web. Pesquisa portais de emprego da Índia (Naukri, iimjobs, Cutshort, Foundit, LinkedIn India, Wellfound…) via Claude CLI WebSearch.",
+    "ko": "웹 검색 클릭 시 실행되는 쿼리입니다. 인도 채용 포털 (Naukri, iimjobs, Cutshort, Foundit, LinkedIn India, Wellfound…)을 Claude CLI WebSearch로 검색합니다.",
+    "ja": "「ウェブ検索」クリック時に実行されるクエリです。インドの求人サイト (Naukri, iimjobs, Cutshort, Foundit, LinkedIn India, Wellfound…) を Claude CLI WebSearch で検索します。",
+    "ru": "Запросы, которые выполняются при нажатии «Поиск». Ищет индийские порталы (Naukri, iimjobs, Cutshort, Foundit, LinkedIn India, Wellfound…) через Claude CLI WebSearch.",
+    "zh-CN": "点击「网络搜索」时执行的查询。通过 Claude CLI WebSearch 搜索印度招聘平台（Naukri、iimjobs、Cutshort、Foundit、LinkedIn India、Wellfound…）。",
+    "zh-TW": "點擊「網路搜尋」時執行的查詢。透過 Claude CLI WebSearch 搜尋印度招聘平台（Naukri、iimjobs、Cutshort、Foundit、LinkedIn India、Wellfound…）。",
+    "fr": "Requêtes exécutées lors d'un clic sur Recherche web. Recherche les portails d'emploi indiens (Naukri, iimjobs, Cutshort, Foundit, LinkedIn India, Wellfound…) via Claude CLI WebSearch."
+  },
+  "scan.wsNoQueries": {
+    "en": "No search queries configured in portals.yml. Add search_queries entries to enable WebSearch scanning.",
+    "es": "No hay consultas configuradas en portals.yml. Añade entradas en search_queries para habilitar la búsqueda web.",
+    "pt-BR": "Nenhuma consulta configurada em portals.yml. Adicione entradas em search_queries para habilitar a busca web.",
+    "ko": "portals.yml에 검색 쿼리가 없습니다. 웹 검색 스캔을 활성화하려면 search_queries 항목을 추가하세요.",
+    "ja": "portals.yml に検索クエリが設定されていません。ウェブ検索スキャンを有効にするには search_queries エントリを追加してください。",
+    "ru": "В portals.yml нет поисковых запросов. Добавьте записи в search_queries для включения веб-поиска.",
+    "zh-CN": "portals.yml 中未配置搜索查询。请添加 search_queries 条目以启用网络搜索扫描。",
+    "zh-TW": "portals.yml 中未設定搜尋查詢。請新增 search_queries 條目以啟用網路搜尋掃描。",
+    "fr": "Aucune requête configurée dans portals.yml. Ajoutez des entrées search_queries pour activer la recherche web."
+  },
   "scan.scanResultsApi": {
     "en": "API configured",
     "es": "API configurada",

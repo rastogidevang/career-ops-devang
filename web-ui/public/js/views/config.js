@@ -83,10 +83,10 @@ Router.register('config', async () => {
     {
       // v1.39.0 (WS8.2) — explicit provider preference.
       key: 'LLM_PROVIDER', secret: false, kind: 'select',
-      options: ['auto', 'claude', 'gemini', 'openai', 'qwen', 'openrouter'], defaultValue: 'auto',
+      options: ['auto', 'claude', 'claude-cli', 'gemini', 'openai', 'qwen', 'openrouter'], defaultValue: 'auto',
       labelKey: 'config.llmProvider', label: 'LLM_PROVIDER',
       hintKey: 'config.llmProviderHint',
-      hintFallback: 'auto = use whichever key is set, preferring Anthropic → Gemini → OpenAI → Qwen → OpenRouter. claude / gemini / openai / qwen / openrouter = force that one. A forced provider with no key → manual-prompt fallback.',
+      hintFallback: 'auto = use whichever key is set, preferring Anthropic → Claude CLI → Gemini → OpenAI → Qwen → OpenRouter. claude-cli = use Claude Code CLI (no API key needed, uses your subscription). claude / gemini / openai / qwen / openrouter = force that provider. A forced provider with no key → manual-prompt fallback.',
     },
     {
       key: 'ANTHROPIC_API_KEY', secret: true,
@@ -576,7 +576,7 @@ Router.register('config', async () => {
     }
     lastGoodSt = st;
     apiSummary.hidden = false;
-    const NAME = { anthropic: 'Anthropic', gemini: 'Gemini', openai: 'OpenAI', qwen: 'Qwen', openrouter: 'OpenRouter' };
+    const NAME = { anthropic: 'Anthropic', 'claude-cli': 'Claude CLI', gemini: 'Gemini', openai: 'OpenAI', qwen: 'Qwen', openrouter: 'OpenRouter' };
     const active = st.activeProvider
       ? (NAME[st.activeProvider] || st.activeProvider)
       : t('dash.provider.manual', 'Manual prompt mode');
@@ -584,7 +584,7 @@ Router.register('config', async () => {
     const activeLabel = c('span', { className: 'api-keys__active' },
       t('config.activeProvider', 'Active') + ': ' + active);
     const countLabel = c('span', { className: 'api-keys__count' },
-      t('config.keysConfiguredPrefix', 'Keys') + ': ' + count + ' / 5');
+      t('config.keysConfiguredPrefix', 'Keys') + ': ' + count + ' / 6');
     // Atomic swap — never leaves the chip empty mid-update.
     apiSummary.replaceChildren(activeLabel, countLabel);
   }

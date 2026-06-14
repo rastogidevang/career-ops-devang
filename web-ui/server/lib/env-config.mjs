@@ -39,7 +39,7 @@ export const KNOWN_KEYS = [
  * one provider; with no key it falls through to the manual-prompt
  * path exactly like the pre-v1.39 no-key behaviour.
  */
-export const LLM_PROVIDERS = ['auto', 'claude', 'gemini', 'openai', 'qwen', 'openrouter'];
+export const LLM_PROVIDERS = ['auto', 'claude', 'claude-cli', 'gemini', 'openai', 'qwen', 'openrouter'];
 
 /**
  * Effective provider preference order from LLM_PROVIDER:
@@ -55,14 +55,15 @@ export const LLM_PROVIDERS = ['auto', 'claude', 'gemini', 'openai', 'qwen', 'ope
 export function providerOrder(env = process.env) {
   const v = String(env.LLM_PROVIDER || 'auto').trim().toLowerCase();
   if (v === 'claude') return ['anthropic'];
+  if (v === 'claude-cli') return ['claude-cli'];
   if (v === 'gemini') return ['gemini'];
   if (v === 'openai') return ['openai'];
   if (v === 'qwen') return ['qwen'];
   if (v === 'openrouter') return ['openrouter'];
-  // OpenRouter sits at the TAIL of the auto order: a user who already
-  // had Anthropic/Gemini/OpenAI/Qwen working keeps that exact routing;
-  // OpenRouter only kicks in when it's the sole configured key.
-  return ['anthropic', 'gemini', 'openai', 'qwen', 'openrouter'];
+  // claude-cli sits after anthropic so an explicit API key always wins;
+  // it activates automatically when the Claude Code CLI is on PATH and
+  // no API key is configured. OpenRouter stays at the tail.
+  return ['anthropic', 'claude-cli', 'gemini', 'openai', 'qwen', 'openrouter'];
 }
 
 /**

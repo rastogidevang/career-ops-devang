@@ -9,7 +9,7 @@ import { providerOrder, LLM_PROVIDERS, KNOWN_KEYS, SECRET_KEYS } from '../server
 import { parseArgs, buildUpdates, askSecret } from '../scripts/init.mjs';
 
 test('providerOrder: auto/unset/unknown → full OR order (v1.57.0 + openrouter tail)', () => {
-  const ALL = ['anthropic', 'gemini', 'openai', 'qwen', 'openrouter'];
+  const ALL = ['anthropic', 'claude-cli', 'gemini', 'openai', 'qwen', 'openrouter'];
   assert.deepEqual(providerOrder({}), ALL);
   assert.deepEqual(providerOrder({ LLM_PROVIDER: 'auto' }), ALL);
   assert.deepEqual(providerOrder({ LLM_PROVIDER: 'banana' }), ALL);
@@ -37,7 +37,7 @@ test('env-config exposes the full v1.57.0 provider surface', () => {
   for (const k of ['OPENAI_MODEL', 'QWEN_MODEL', 'OPENROUTER_MODEL', 'LLM_PROVIDER']) {
     assert.ok(!SECRET_KEYS.has(k), `${k} must NOT be secret`);
   }
-  assert.deepEqual(LLM_PROVIDERS, ['auto', 'claude', 'gemini', 'openai', 'qwen', 'openrouter']);
+  assert.deepEqual(LLM_PROVIDERS, ['auto', 'claude', 'claude-cli', 'gemini', 'openai', 'qwen', 'openrouter']);
 });
 
 test('init parseArgs: flag-driven', () => {

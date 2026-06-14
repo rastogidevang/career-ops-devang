@@ -154,7 +154,7 @@ test('providerOrder: explicit openrouter pin → [openrouter]', () => {
 
 test('providerOrder: auto appends openrouter at the tail (never overrides existing setups)', () => {
   assert.deepEqual(providerOrder({ LLM_PROVIDER: 'auto' }),
-    ['anthropic', 'gemini', 'openai', 'qwen', 'openrouter']);
+    ['anthropic', 'claude-cli', 'gemini', 'openai', 'qwen', 'openrouter']);
 });
 
 test('validateConfig: a real-shape OpenRouter key validates', () => {

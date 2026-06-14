@@ -100,9 +100,14 @@ test('POST /api/mode/:slug rejects allowlist slugs whose template is absent', as
 });
 
 test('POST /api/mode/:slug { run: true } without GEMINI_API_KEY → still manual', async () => {
-  const r = await postMode('project', { idea: 'A CLI for X', run: true });
-  assert.equal(r.status, 200);
-  assert.equal(r.body.mode, 'manual');
+  process.env.DISABLE_CLAUDE_CLI = '1';
+  try {
+    const r = await postMode('project', { idea: 'A CLI for X', run: true });
+    assert.equal(r.status, 200);
+    assert.equal(r.body.mode, 'manual');
+  } finally {
+    delete process.env.DISABLE_CLAUDE_CLI;
+  }
 });
 
 test('POST /api/mode/:slug strips run flag from the JSON context block', async () => {

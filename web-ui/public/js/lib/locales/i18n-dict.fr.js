@@ -443,6 +443,12 @@ window.__I18N_DICT_FR = {
   'scan.workdayBlocked': "Locataire Workday bloqué", // Workday tenant blocked
   'scan.workdayFallbackHint': "plan B : utilisez /career-ops scan (Playwright) pour ce locataire", // fallback: use /career-ops scan (Playwright) for this tenant
   'scan.allDisabled': "Toutes les entreprises désactivées (enabled: false).", // All companies disabled (enabled: false).
+  'scan.btnWebSearch': "Recherche web",
+  'scan.btnWsTitle': "Chercher des offres sur les sites indiens (Naukri, Cutshort, iimjobs, Foundit, LinkedIn India, Wellfound…) via Claude CLI WebSearch. Nécessite claude installé.",
+  'scan.wsBadge': "Recherche web (Inde)",
+  'scan.wsQueriesTitle': "Requêtes WebSearch (Inde)",
+  'scan.wsQueriesHelp': "Requêtes exécutées lors d'un clic sur Recherche web. Recherche les portails d'emploi indiens (Naukri, iimjobs, Cutshort, Foundit, LinkedIn India, Wellfound…) via Claude CLI WebSearch.",
+  'scan.wsNoQueries': "Aucune requête configurée dans portals.yml. Ajoutez des entrées search_queries pour activer la recherche web.",
   'scan.scanResultsApi': "API configurée", // API configured
   'scan.websearchOnly': "recherche web uniquement — le scanner passe à côté", // websearch only — scanner skips
   'api.netError': "Erreur réseau", // Network error

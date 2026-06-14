@@ -138,7 +138,11 @@ export function scaffold(key, lang) {
  *
  * Used by /api/deep and /api/mode/:slug Anthropic branches (REVIEW-A1).
  *
- * @param {{ modeSlugs?: string[], maxBytesPerFile?: number }} opts
+ * @param {{ modeSlugs?: string[], maxBytesPerFile?: number, claudeCli?: boolean }} opts
+ *   claudeCli: true swaps the preamble so the model is told NOT to use tools —
+ *   needed because `claude --print` runs inside Claude Code and has file-system
+ *   tool access; the default preamble ("outside Claude Code") would cause it to
+ *   re-read the already-inlined files via tool calls, polluting stdout.
  * @returns {string} A delimited block ending with two newlines, ready to
  *   prepend to the user-facing prompt.
  */
@@ -164,10 +168,18 @@ export function bundleProjectContext(opts = {}) {
     blocks.push(`--- ${f.label} ---\n${text}`);
   }
   if (!blocks.length) return '';
+  const preamble = opts.claudeCli
+    ? [
+        'The project files below are already inlined.',
+        'Do NOT use tools or filesystem access to read them — treat this content as authoritative and respond directly.',
+      ]
+    : [
+        'You are running outside Claude Code, so the files referenced below',
+        'are inlined here. Treat them as authoritative.',
+      ];
   return [
     '<project_context>',
-    'You are running outside Claude Code, so the files referenced below',
-    'are inlined here. Treat them as authoritative.',
+    ...preamble,
     '',
     blocks.join('\n\n'),
     '</project_context>',
